@@ -1,7 +1,10 @@
 <h1 align="center">ToFStart</h1>
 
 <div align="center">
-<img src="https://invidget.switchblade.xyz/QvHWNxb6pH?language=ru"/> <br>
+<a href="https://discord.gg/QvHWNxb6pH">
+<img src="https://invidget.switchblade.xyz/QvHWNxb6pH?language=ru"/>
+</a> 
+<br>
 <img src="https://img.shields.io/github/downloads/yarik0chka/ToFStart/total.svg"/>
 <br>
 </div>
