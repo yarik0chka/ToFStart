@@ -2,16 +2,16 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using ProxyKit;
-using System.IO;
-using System;
 using Microsoft.Extensions.Hosting;
+using ProxyKit;
+using System;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
-using System.Threading;
-using System.Security.Principal;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
+using System.Threading;
 
 namespace ToFStart
 {
@@ -49,10 +49,10 @@ namespace ToFStart
                          context.Response.Headers["Transfer-Encoding"] = "identity";
                          context.Response.ContentType = "application/json";
                          context.Response.WriteAsync(config);
-                         string text = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"));
+                         string hosts = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"));
                          Console.WriteLine("Deleting 127.0.0.1 user.laohu.com");
-                         text = text.Replace("127.0.0.1 user.laohu.com", "#127.0.0.1 user.laohu.com");
-                         File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"), text);
+                         hosts = hosts.Replace("127.0.0.1 user.laohu.com", "#127.0.0.1 user.laohu.com");
+                         File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"), hosts);
                          Console.WriteLine("Done.");
                          Thread thread1 = new Thread(Exit);
                          thread1.Start();
@@ -65,7 +65,7 @@ namespace ToFStart
             public static void Main(string[] args)
             {
                 var GameFolder = Directory.GetCurrentDirectory();
-                string text = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"));
+                string hosts = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"));
                 var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ToFStart.localhost.pfx");
                 var bytes = new byte[stream.Length];
                 stream.Read(bytes, 0, bytes.Length);
@@ -86,25 +86,49 @@ namespace ToFStart
                     .Build();
                 if (!IsAdministrator())
                 {
-                    Console.WriteLine("Запустите программу от имени администратора.");
-                    Thread.Sleep(5000);
+                    using (Process admin = new Process())
+                    {
+                        admin.StartInfo.FileName = Environment.GetCommandLineArgs()[0];
+                        admin.StartInfo.Verb = "runas";
+                        admin.Start();
+                    }
                     Environment.Exit(1);
                 }
                 if (File.Exists(Path.Combine(GameFolder, "gameLauncher.exe")))
                 {
+                    #if DX11
+                    string GameConfig = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "WmGpLaunch", "UserData", "Config", "Config.ini"));
+                    if (GameConfig.Contains("dx11=0"))
+                    {
+                        GameConfig = GameConfig.Replace("dx11=0", "dx11=1");
+                        try
+                        {
+                            File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "WmGpLaunch", "UserData", "Config", "Config.ini"), GameConfig);
+
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+
+                            Console.WriteLine("Снимите галочку \"Только для чтения\" в HTMobile\\WmGpLaunch\\UserData\\Config\\Config.ini");
+                        }
+                        Thread.Sleep(5000);
+                        Environment.Exit(1);
+
+                    }
+                    #endif
                     Process.Start("gameLauncher.exe");
-                    if (text.Contains("#127.0.0.1 user.laohu.com"))
+                    if (hosts.Contains("#127.0.0.1 user.laohu.com"))
                     {
                         Console.WriteLine("Adding 127.0.0.1 user.laohu.com");
-                        text = text.Replace("#127.0.0.1 user.laohu.com", "127.0.0.1 user.laohu.com");
-                        File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"), text);
+                        hosts = hosts.Replace("#127.0.0.1 user.laohu.com", "127.0.0.1 user.laohu.com");
+                        File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"), hosts);
                     }
-                    else if (!text.Contains("127.0.0.1 user.laohu.com"))
+                    else if (!hosts.Contains("127.0.0.1 user.laohu.com"))
                     {
                         Console.WriteLine("Adding 127.0.0.1 user.laohu.com");
-                        File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"), text + "\n127.0.0.1 user.laohu.com");
+                        File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"), hosts + "\n127.0.0.1 user.laohu.com");
                     }
-                    else if (text.Contains("127.0.0.1 user.laohu.com") & !text.Contains("#127.0.0.1 user.laohu.com"))
+                    else if (hosts.Contains("127.0.0.1 user.laohu.com") & !hosts.Contains("#127.0.0.1 user.laohu.com"))
                     {
                         Console.WriteLine("Already added, continue");
                     }
