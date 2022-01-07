@@ -49,11 +49,7 @@ namespace ToFStart
                          context.Response.Headers["Transfer-Encoding"] = "identity";
                          context.Response.ContentType = "application/json";
                          context.Response.WriteAsync(config);
-                         string hosts = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"));
-                         Console.WriteLine("Deleting 127.0.0.1 user.laohu.com");
-                         hosts = hosts.Replace("127.0.0.1 user.laohu.com", "#127.0.0.1 user.laohu.com");
-                         File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"), hosts);
-                         Console.WriteLine("Done.");
+                         Comment();
                          Thread thread1 = new Thread(Exit);
                          thread1.Start();
                          return context
@@ -62,8 +58,27 @@ namespace ToFStart
                      }
                      ));
             }
+            static void Comment()
+            {
+                string hosts = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"));
+
+                if (hosts.Contains("#127.0.0.1 user.laohu.com"))
+                {
+                    return;
+                }
+                Console.WriteLine("Deleting 127.0.0.1 user.laohu.com");
+                hosts = hosts.Replace("127.0.0.1 user.laohu.com", "#127.0.0.1 user.laohu.com");
+                File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"), hosts);
+                Console.WriteLine("Done.");
+            }
+            static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+            {
+                Comment();
+
+            }
             public static void Main(string[] args)
             {
+                AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
                 var GameFolder = Directory.GetCurrentDirectory();
                 string hosts = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"));
                 var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ToFStart.localhost.pfx");
