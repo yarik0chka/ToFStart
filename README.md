@@ -1,4 +1,4 @@
-<h1 align="center">ToFStart <a href="https://github.com/yarik0chka/ToFStart/README-EN.md">(English version here)</a></h1> 
+<h1 align="center">ToFStart <a href="https://github.com/yarik0chka/ToFStart/blob/master/README-EN.md">(English version here)</a></h1> 
 
 <div align="center">
 <a href="https://discord.gg/QvHWNxb6pH">
