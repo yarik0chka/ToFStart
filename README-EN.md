@@ -28,7 +28,7 @@ And also for convenience, make a shortcut (RMB>Send to>Desktop)
 ## Known issues
 If you have any problems, you can get help in the Discord server [Tower of Fantasy RU](https://discord.gg/QvHWNxb6pH) `#🛠・технический-раздел`, or create issue, or DM me
 - 网络错误(1.7.0), 未知错误(1.0.404)
-  ### Solution: If running ToFStart again does not help, delete the `127.0.0.1 user.laohu.com` in `C:\Windows\System32\drivers\etc\hosts`
+  - Solution: If running ToFStart again does not help, delete the `127.0.0.1 user.laohu.com` in `C:\Windows\System32\drivers\etc\hosts`
 
 ## Authors
 
