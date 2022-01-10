@@ -124,7 +124,7 @@ namespace ToFStart
                         catch (UnauthorizedAccessException)
                         {
 
-                            Console.WriteLine("Снимите галочку \"Только для чтения\" в HTMobile\\WmGpLaunch\\UserData\\Config\\Config.ini");
+                            Console.WriteLine("Remove Read-Only attribute in HTMobile\\WmGpLaunch\\UserData\\Config\\Config.ini");
                         }
                         Thread.Sleep(5000);
                         Environment.Exit(1);
@@ -152,7 +152,7 @@ namespace ToFStart
                 }
                 else
                 {
-                    Console.WriteLine("Переместите программу в папку с игрой.");
+                    Console.WriteLine("Move ToFStart to the game folder.");
                     Thread.Sleep(5000);
                 }
             }
