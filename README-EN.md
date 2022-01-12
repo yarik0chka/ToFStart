@@ -15,6 +15,8 @@ A program to start Tower of Fantasy without the need to scan a QR code.
 1. Download [ToFStart](https://github.com/yarik0chka/ToFStart/releases/latest/download/ToFStart.exe), or [ToFStartDX11](https://github.com/yarik0chka/ToFStart/releases/latest/download/ToFStartDX11.exe) for start ToF with DirectX 11
 2. Move it to the game folder (WanmeiGameAssistant\games\HTMobile)
 3. Run ToFStart as administrator.
+4. Click on the check mark to save the data, after that you don't need to run ToFStart
+![](/WmgpMobileGame.png?raw=true)
 
 To exit from the program without problems, press `CTRL+C`.
 

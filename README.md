@@ -16,6 +16,8 @@
 1. Скачиваем [ToFStart](https://github.com/yarik0chka/ToFStart/releases/latest/download/ToFStart.exe), или [ToFStartDX11](https://github.com/yarik0chka/ToFStart/releases/latest/download/ToFStartDX11.exe) для запуска игры с DirectX 11
 2. Помещаем его в папку с игрой (WanmeiGameAssistant\games\HTMobile)
 3. Запускаем ToFStart от имени администратора.
+4. Нажимаем на галочку для сохранения данных, после этого запускать ToFStart не требуется   
+![](/WmgpMobileGame.png?raw=true)
 
 Для того, чтобы без проблем выйти из программы, нажмите `CTRL+C`
 
