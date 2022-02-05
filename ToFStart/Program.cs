@@ -69,15 +69,38 @@ namespace ToFStart
                 Console.WriteLine("Deleting 127.0.0.1 user.laohu.com");
                 hosts = hosts.Replace("127.0.0.1 user.laohu.com", "#127.0.0.1 user.laohu.com");
                 File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"), hosts);
-                Console.WriteLine("Done.");
+                Console.WriteLine("Exiting...");
             }
             static void CurrentDomain_ProcessExit(object sender, EventArgs e)
             {
                 Comment();
 
             }
-            public static void Main(string[] args)
+            static bool isHostsExists()
             {
+                if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"))) { return true; }
+                else { return false; }
+
+            }
+            public static void Main(string[] args)
+
+            {
+                if (!IsAdministrator())
+                {
+                    using (Process admin = new Process())
+                    {
+                        admin.StartInfo.FileName = Environment.GetCommandLineArgs()[0];
+                        admin.StartInfo.Verb = "runas";
+                        admin.Start();
+                    }
+                    Environment.Exit(1);
+                }
+
+                if (!isHostsExists())
+                {
+                    File.Create(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts")).Dispose();
+                }
+                
                 AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
                 var GameFolder = Directory.GetCurrentDirectory();
                 string hosts = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"));
@@ -99,16 +122,6 @@ namespace ToFStart
                     .UseIISIntegration()
                     .UseStartup<Startup>()
                     .Build();
-                if (!IsAdministrator())
-                {
-                    using (Process admin = new Process())
-                    {
-                        admin.StartInfo.FileName = Environment.GetCommandLineArgs()[0];
-                        admin.StartInfo.Verb = "runas";
-                        admin.Start();
-                    }
-                    Environment.Exit(1);
-                }
                 if (File.Exists(Path.Combine(GameFolder, "gameLauncher.exe")))
                 {
                     #if DX11
