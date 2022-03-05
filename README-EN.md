@@ -10,6 +10,7 @@
 </div>
 A program to start Tower of Fantasy without the need to scan a QR code.
 
+# Game update 05.03.2022: added the login without QR code.
 ## Using
 
 1. Download [ToFStart](https://github.com/yarik0chka/ToFStart/releases/latest/download/ToFStart.exe), or [ToFStartDX11](https://github.com/yarik0chka/ToFStart/releases/latest/download/ToFStartDX11.exe) for start ToF with DirectX 11
